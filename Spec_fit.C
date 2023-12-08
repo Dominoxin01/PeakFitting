@@ -10,8 +10,8 @@ double fit1g(double *x, double *p);
 TH1I *h1;
 TCanvas *c1;
 
-void SpecFit(const char *filename){
-//problems with the root stuff
+void SpecLoad(const char *filename){
+//This function loads in the data and plots it to 
 	//h1->Clear();
 	double low_x, up_x;
 	std::vector<int> data = DataReadIn(filename);
@@ -24,8 +24,6 @@ void SpecFit(const char *filename){
 		h1->SetBinContent(i, data[i]);
 	}
 	h1->Draw("hist");
-	
-
 
 }
 
@@ -92,7 +90,8 @@ std::vector<int> DataReadIn(const char *filename){
 	return data;
 }
 
-double fit1g(double *x, double *p) { 
+double fit1g(double *x, double *p) {
+//An exaple function used by Prof. Peter Jones in his Buffit macro, kept in case but not used in the code itself.
   double C_INV_SQRT_2PI = 0.39894228; 
   double arg1 = 0; 
   double dX = 1;
