@@ -186,13 +186,15 @@ void FitData(){
 }
 
 
-//This function re-adjust the display window to specifed channel numbers: 
+
 void Zoom(int low_x, int up_x){
+//This function re-adjust the display window to specifed channel numbers.
 	h1->GetXaxis()->SetRangeUser(low_x, up_x);
 	h1->Draw("Same");
 }
 
 void ZoomOut(){
+//This funciton goes from the current zoom in state to showing the full spectrum.
 	std::vector<int> data;
 	h1->GetXaxis()->SetRangeUser(0, data.size());
 	h1->Draw("Same");
