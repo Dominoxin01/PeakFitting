@@ -7,8 +7,12 @@
 //Function Declarations:
 std::vector<int> DataReadIn(const char *filename);
 double fit1g(double *x, double *p);
+
+//Global declarations:
 TH1I *h1;
 TCanvas *c1;
+
+std::vector<int> data;
 
 void SpecLoad(const char *filename){
 //This function loads in the data and plots it to 
@@ -178,11 +182,20 @@ void FitData(){
 	
 	}
 	
-	
-	
 	h1->Draw("Same");
-	
+}
 
+
+//This function re-adjust the display window to specifed channel numbers: 
+void Zoom(int low_x, int up_x){
+	h1->GetXaxis()->SetRangeUser(low_x, up_x);
+	h1->Draw("Same");
+}
+
+void ZoomOut(){
+	std::vector<int> data;
+	h1->GetXaxis()->SetRangeUser(0, data.size());
+	h1->Draw("Same");
 }
 
 std::vector<int> DataReadIn(const char *filename){
