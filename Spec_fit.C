@@ -212,6 +212,30 @@ void FitData(){
 	h1->Draw("Same");
 }
 
+void FitDirectory(const char *dirname){
+	std::string answer;
+	ask_for_input: std::cout << "This function fits one peak across a given interval in all spectra in the given directory. Do you want to continue? [y/n]" << std::endl;
+	std::cin >> answer;
+
+	if (!answer.compare("n")){
+		std::cout << std::endl;	
+		std::cout << "Leaving program." << std::endl;
+		return;
+	}
+	else if(!answer.compare("y")){
+		std::cout << std::endl;
+		std::cout << "Continuing" << std::endl;
+	}
+
+	else{
+		std::cout << std::endl;
+		std::cout << "Invalid answer." << std::endl;
+		goto ask_for_input;
+	}
+	
+
+}
+
 
 
 void Zoom(int low_x, int up_x){
