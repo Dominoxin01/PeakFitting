@@ -74,9 +74,9 @@ void FitData(){
     		f1->SetParameter(2, 0.5*(up_x-low_x)/2.35);
     		//std::cout << up_x-low_x << std::endl;
     		
+    		h1->Fit("f1", "IM", "", low_x, up_x);
     		f1 -> GetChisquare();
 		f1 -> GetNDF();
-    		h1->Fit("f1", "IM", "", low_x, up_x);
 		break;
 		}
 		
@@ -110,9 +110,9 @@ void FitData(){
 		f2->SetParameter(2, FWHM_est/2.35);
 		f2->SetParameter(5, FWHM_est/2.35);
 		
+		h1->Fit("f2", "IM", "", low_x, up_x);
 		f2 -> GetChisquare();
 		f2 -> GetNDF();
-		h1->Fit("f2", "IM", "", low_x, up_x);
 		break;
 		}
 	case 3: {
@@ -155,9 +155,9 @@ void FitData(){
 		f3->SetParameter(5, FWHM_est/2.35);
 		f3->SetParameter(8, FWHM_est/2.35);
 		
+		h1->Fit("f3", "IM", "", low_x, up_x);
 		f3 -> GetChisquare();
 		f3 -> GetNDF();
-		h1->Fit("f3", "IM", "", low_x, up_x);
 		break;
 		}
 	case 4: {
@@ -212,9 +212,10 @@ void FitData(){
 		f4->SetParameter(8, FWHM_est/2.35);
 		f4->SetParameter(11, FWHM_est/2.35);
 		
+		h1->Fit("f4", "IM", "", low_x, up_x);
 		f4 -> GetChisquare();
 		f4 -> GetNDF();
-		h1->Fit("f4", "IM", "", low_x, up_x);
+		
 
 		break;
 		}
