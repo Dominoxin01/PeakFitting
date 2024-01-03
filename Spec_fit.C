@@ -58,36 +58,36 @@ void FitData(){
 	switch (number_peaks){
 	case 1:{
 		TF1 *f1 = f1g(h1, low_x, up_x);
-    		h1->Fit("f1", "IM", "", low_x, up_x);
-    		f1 -> GetChisquare();
-		f1 -> GetNDF();
+    		h1->Fit("f1", "IMRB", "", low_x, up_x);
+    		std::cout << "Chi^2: " <<f1 -> GetChisquare()<< std::endl;
+		std::cout << "ndf: " << f1 -> GetNDF()<< std::endl;
+		std::cout << "Chi^2/ndf: " << f1 -> GetChisquare()/f1 -> GetNDF() << std::endl;
 		break;
 		}
 		
 	case 2: {
 		TF1 *f2 = f2g(h1, low_x, up_x);
-		
-		h1->Fit("f2", "IM", "", low_x, up_x);
-		f2 -> GetChisquare();
-		f2 -> GetNDF();
+		h1->Fit("f2", "IMRB", "", low_x, up_x);
+		std::cout << "Chi^2: " <<f2 -> GetChisquare()<< std::endl;
+		std::cout << "ndf: " << f2 -> GetNDF()<< std::endl;
+		std::cout << "Chi^2/ndf: " << f2 -> GetChisquare()/f2 -> GetNDF() << std::endl;
 		break;
 		}
 	case 3: {
 		TF1 *f3 = f3g(h1, low_x, up_x);
 		
-		h1->Fit("f3", "IM", "", low_x, up_x);
-		f3 -> GetChisquare();
-		f3 -> GetNDF();
+		h1->Fit("f3", "IMRB", "", low_x, up_x);
+		std::cout << "Chi^2: " <<f3 -> GetChisquare()<< std::endl;
+		std::cout << "ndf: " << f3 -> GetNDF()<< std::endl;
+		std::cout << "Chi^2/ndf: " << f3 -> GetChisquare()/f3 -> GetNDF() << std::endl;
 		break;
 		}
 	case 4: {
 		TF1 *f4 = f4g(h1, low_x, up_x);
-		
-		h1->Fit("f4", "IM", "", low_x, up_x);
-		f4 -> GetChisquare();
-		f4 -> GetNDF();
-		
-
+		h1->Fit("f4", "IMRB", "", low_x, up_x);
+		std::cout << "Chi^2: " << f4 -> GetChisquare() << std::endl;
+		std::cout << "ndf: " << f4 -> GetNDF()<< std::endl;
+		std::cout << "Chi^2/ndf: " << f4 -> GetChisquare()/f4 -> GetNDF() << std::endl;
 		break;
 		}
 	}
