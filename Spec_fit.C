@@ -98,9 +98,8 @@ void FitData(){
 
 void FitDirectory(const char *dirname){
 	std::string answer;
-	ask_for_input: std::cout << "This function fits one peak across a given interval in all spectra in the given directory. Do you want to continue? [y/n]" << std::endl;
+	ask_for_input: std::cout << "This function fits one peak across a given interval in all spectra in the given directory, in alphabetical order. Do you want to continue? [y/n]" << std::endl;
 	std::cin >> answer;
-
 	if (!answer.compare("n")){
 		std::cout << std::endl;	
 		std::cout << "Leaving program." << std::endl;
@@ -114,10 +113,19 @@ void FitDirectory(const char *dirname){
 	else{
 		std::cout << std::endl;
 		std::cout << "Invalid answer." << std::endl;
-		goto ask_for_input;
+		goto ask_for_input; //goes to the second line in this functions.
 	}
 	
-
+	//Opening an interface with a usinx based operating system:
+	TUnixSystem *os = new TUnixSystem();
+	//Using said interface to open a directory given by the dirname pathname:
+	void *dir = os -> OpenDirectory(dirname);
+	//preparing a filename pointer:
+	const char *filename;
+	//looping over the files in a given directory and printing them:
+	while (( file = os  -> GetDirEntry(dir))){
+	std::cout << filename << std::endl;
+	}
 }
 
 
