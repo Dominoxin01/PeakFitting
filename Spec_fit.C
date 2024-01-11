@@ -17,21 +17,27 @@ TCanvas *c1;
 
 std::vector<int> data;
 
-void SpecLoad(const char *filename){
+void SpecLoad(const char *filename, bool plot = true){
 //This function loads in the data and plots it to 
 	//h1->Clear();
 	double low_x, up_x;
 	std::vector<int> data = DataReadIn(filename);
-	std::cout << "Worsk so far (Data Read):D"<< std::endl;
-	c1 = new TCanvas("c1", "histo", 1200, 600); 
 	h1 = new TH1I("h1", filename, data.size(), 0, data.size());
-	
 	
 	for (int i = 0; i < data.size(); i++){
 		h1->SetBinContent(i, data[i]);
 	}
-	h1->Draw("hist");
-
+	
+	if(plot == false){
+		return;
+		}
+	else if(plot == true){
+		c1 = new TCanvas("c1", "histo", 1200, 600); 
+		h1->Draw("hist");
+		}
+	else{
+		std::cout<< "Something broke. What did you do?"<<std::endl;
+		}
 }
 
 void FitData(){
@@ -123,7 +129,7 @@ void FitDirectory(const char *dirname){
 	//preparing a filename pointer:
 	const char *filename;
 	//looping over the files in a given directory and printing them:
-	while (( file = os  -> GetDirEntry(dir))){
+	while (( filename = os  -> GetDirEntry(dir))){
 	std::cout << filename << std::endl;
 	}
 }
