@@ -102,6 +102,17 @@ void FitData(){
 	h1->Draw("Same");
 }
 
+void FitDataArg1g(int low_x, int up_x, int FWHM_est, int cen_1){
+	//This function is a different implementation of FitData(), which can fit only 1 Gausian, but takes in arguments for fitting parameters, rather than asking from them. Used in FitDirectory().
+	TF1 *f1 = f1g(h1, low_x, up_x);
+    	h1->Fit("f1", "IMRB", "", low_x, up_x);
+    	std::cout << "Chi^2: " <<f1 -> GetChisquare()<< std::endl;
+	std::cout << "ndf: " << f1 -> GetNDF()<< std::endl;
+	std::cout << "Chi^2/ndf: " << f1 -> GetChisquare()/f1 -> GetNDF() << std::endl;
+
+
+}
+
 void FitDirectory(const char *dirname){
 	std::string answer;
 	ask_for_input: std::cout << "This function fits one peak across a given interval in all spectra in the given directory, in alphabetical order. Do you want to continue? [y/n]" << std::endl;
@@ -130,6 +141,7 @@ void FitDirectory(const char *dirname){
 	const char *filename;
 	//looping over the files in a given directory and printing them:
 	while (( filename = os  -> GetDirEntry(dir))){
+	SpecLoad(filename, false);
 	std::cout << filename << std::endl;
 	}
 }
