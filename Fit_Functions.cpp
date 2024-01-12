@@ -4,7 +4,7 @@
 	int FWHM_est;
 	int cen_1, cen_2, cen_3, cen_4;
 
-TF1 *f1g(TH1I *h1, int low_x, int up_x){
+TF1 *f1g(TH1I *h1, int low_x, int up_x, int FWHM_est){
 //setting the fitting function as a scaled normalised Gaussian and a linear background:
 	TF1 *f1 = new TF1("f1", "gausn(0) + pol1(3)", low_x, up_x); // fit1g last 5
 	f1->SetParName(0 , "1 Counts");
@@ -23,12 +23,12 @@ TF1 *f1g(TH1I *h1, int low_x, int up_x){
     	//the standard deviation should be less than the selected region:
     	f1->SetParLimits(2,0., up_x-low_x);
    	//assuming that the standard deviation is half the selected width (may be sub-optimal:)
-    	f1->SetParameter(2, 0.5*(up_x-low_x)/2.35);
+    	f1->SetParameter(2, FWHM_est/2.35);
     	//std::cout << up_x-low_x << std::endl;
 	return f1;
 }
 
-TF1 *f2g(TH1I *h1, int low_x, int up_x){
+TF1 *f2g(TH1I *h1, int low_x, int up_x, int FWHM_est){
 //setting the fitting function as two scaled normalised Gaussians and a linear background:
 	TF1 *f2 = new TF1("f2", "gausn(0) + gausn(3) + pol1(6)", low_x, up_x);
 	f2->SetParName(0 , "1 Counts");
@@ -62,7 +62,7 @@ TF1 *f2g(TH1I *h1, int low_x, int up_x){
 
 }
 
-TF1 *f3g(TH1I *h1, int low_x, int up_x) {
+TF1 *f3g(TH1I *h1, int low_x, int up_x, int FWHM_est) {
 	TF1 *f3 = new TF1("f3", "gausn(0) + gausn(3) + gausn(6) + pol1(9)", low_x, up_x);
 	f3->SetParName(0 , "1 Counts");
 	f3->SetParName(1 , "1 Centroid");
@@ -104,7 +104,7 @@ TF1 *f3g(TH1I *h1, int low_x, int up_x) {
 	return f3;	
 	}
 	
-TF1 *f4g(TH1I *h1, int low_x, int up_x){
+TF1 *f4g(TH1I *h1, int low_x, int up_x, int FWHM_est){
 	TF1 *f4 = new TF1("f4", "gausn(0) + gausn(3) + gausn(6) + gausn(9) + pol1(12)", low_x, up_x);
 	f4->SetParName(0 , "1 Counts");
 	f4->SetParName(1 , "1 Centroid");

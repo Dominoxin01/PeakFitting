@@ -3,7 +3,10 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
-
+#include "TF1.h"
+#include "TH1.h"
+#include "TCanvas.h"
+#include "TUnixSystem.h"
 //This is a rubbish solution, but it works for now :P
 #include "Fit_Functions.cpp"
 
@@ -63,7 +66,7 @@ void FitData(){
 	
 	switch (number_peaks){
 	case 1:{
-		TF1 *f1 = f1g(h1, low_x, up_x);
+		TF1 *f1 = f1g(h1, low_x, up_x, FWHM_est);
     		h1->Fit("f1", "IMRB", "", low_x, up_x);
     		std::cout << "Chi^2: " <<f1 -> GetChisquare()<< std::endl;
 		std::cout << "ndf: " << f1 -> GetNDF()<< std::endl;
@@ -72,7 +75,7 @@ void FitData(){
 		}
 		
 	case 2: {
-		TF1 *f2 = f2g(h1, low_x, up_x);
+		TF1 *f2 = f2g(h1, low_x, up_x, FWHM_est);
 		h1->Fit("f2", "IMRB", "", low_x, up_x);
 		std::cout << "Chi^2: " <<f2 -> GetChisquare()<< std::endl;
 		std::cout << "ndf: " << f2 -> GetNDF()<< std::endl;
@@ -80,7 +83,7 @@ void FitData(){
 		break;
 		}
 	case 3: {
-		TF1 *f3 = f3g(h1, low_x, up_x);
+		TF1 *f3 = f3g(h1, low_x, up_x, FWHM_est);
 		
 		h1->Fit("f3", "IMRB", "", low_x, up_x);
 		std::cout << "Chi^2: " <<f3 -> GetChisquare()<< std::endl;
@@ -89,7 +92,7 @@ void FitData(){
 		break;
 		}
 	case 4: {
-		TF1 *f4 = f4g(h1, low_x, up_x);
+		TF1 *f4 = f4g(h1, low_x, up_x, FWHM_est);
 		h1->Fit("f4", "IMRB", "", low_x, up_x);
 		std::cout << "Chi^2: " << f4 -> GetChisquare() << std::endl;
 		std::cout << "ndf: " << f4 -> GetNDF()<< std::endl;
@@ -104,7 +107,7 @@ void FitData(){
 
 void FitDataArg1g(int low_x, int up_x, int FWHM_est, int cen_1){
 	//This function is a different implementation of FitData(), which can fit only 1 Gausian, but takes in arguments for fitting parameters, rather than asking from them. Used in FitDirectory().
-	TF1 *f1 = f1g(h1, low_x, up_x);
+	TF1 *f1 = f1g(h1, low_x, up_x, FWHM_est);
     	h1->Fit("f1", "IMRB", "", low_x, up_x);
     	std::cout << "Chi^2: " <<f1 -> GetChisquare()<< std::endl;
 	std::cout << "ndf: " << f1 -> GetNDF()<< std::endl;
