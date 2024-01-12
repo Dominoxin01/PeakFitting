@@ -22,7 +22,13 @@ std::vector<int> data;
 
 void SpecLoad(const char *filename, bool plot = true){
 //This function loads in the data and plots it to 
-	//h1->Clear();
+
+	if(h1){
+		h1->~TH1I();
+	}
+	if(c1){
+		c1->~TCanvas();
+	}
 	double low_x, up_x;
 	std::vector<int> data = DataReadIn(filename);
 	h1 = new TH1I("h1", filename, data.size(), 0, data.size());
@@ -145,6 +151,7 @@ void FitDirectory(const char *dirname){
 	//looping over the files in a given directory and printing them:
 	while (( filename = os  -> GetDirEntry(dir))){
 	SpecLoad(filename, false);
+	
 	std::cout << filename << std::endl;
 	}
 }
