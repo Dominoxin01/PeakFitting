@@ -2,6 +2,20 @@
 #include <stdlib.h>
 
 
+/* Structure of chn file 
+0  2 Must be -1
+2  2 MCA number or Detector number
+4  2 Segment number (set to 1 in UMCBI)
+6  2 ASCII seconds of start time
+8  4 Real Time (increments of 20 ms) (4-byte integer)
+12 4 Live Time (increments of 20 ms) (4-byte integer)
+16 8 Start date as ASCII DDMMMYY* or binary zeros, if not known. The *
+     character should be ignored if it is not a "1". If it is a "1", it 
+     indicates the data is after the year 2000.
+24 4 Start time as ASCII HHMM or binary zeros, if not known (see Byte 6 above)
+28 2 Channel offset of data
+30 2 Number of channels (length of data)
+
 /************************************************************/
 /* Sample program compatible with Microsoft and Borland C   */
 /* to read header and channel data from a .CHN data file.   */
