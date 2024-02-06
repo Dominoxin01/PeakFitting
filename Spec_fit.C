@@ -3,25 +3,29 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+
 #include "TF1.h"
 #include "TH1.h"
 #include "TCanvas.h"
 #include "TUnixSystem.h"
 //This is a rubbish solution, but it works for now :P
 #include "Fit_Functions.cpp"
+#include "Data_read_in.C"
 
 //Function Declarations:
-std::vector<int> DataReadIn(const char *filename);
+std::vector<int> DataReadIn_SPE(const char *filename);
+std::vector<int> DataReadIn_CHN(const char *filename);
 double fit1g(double *x, double *p);
 
 //Global declarations:
 TH1I *h1;
 TCanvas *c1;
 
-std::vector<int> data;
+std::vector<int> dat;
 
 void SpecLoad(const char *filename, bool plot = true){
 //This function loads in the data and plots it to 
+	const char *ext;
 
 	if(h1){
 		h1->~TH1I();
@@ -30,11 +34,26 @@ void SpecLoad(const char *filename, bool plot = true){
 		c1->~TCanvas();
 	}
 	double low_x, up_x;
-	std::vector<int> data = DataReadIn(filename);
-	h1 = new TH1I("h1", filename, data.size(), 0, data.size());
+	ext = strrchr(filename, '.');
 	
-	for (int i = 0; i < data.size(); i++){
-		h1->SetBinContent(i, data[i]);
+	if(strcmp(ext,"Spe")){
+		std::vector<int> dat = DataReadIn_SPE(filename);
+	}
+	else if(strcmp(ext,"Chn")){
+		std::vector<int> dat = DataReadIn_CHN(filename);
+	}
+	else if(!ext){
+		std::cout << "Cannot find file extension." << std::endl;
+	}
+	else {std::cout << "Unknown file extension" << std::endl;}
+	
+	
+	
+	
+	h1 = new TH1I("h1", filename, dat.size(), 0, dat.size());
+	
+	for (int i = 0; i < dat.size(); i++){
+		h1->SetBinContent(i, dat[i]);
 	}
 	
 	if(plot == false){
@@ -123,6 +142,10 @@ void FitDataArg1g(int low_x, int up_x, int FWHM_est, int cen_1){
 }
 
 void FitDirectory(const char *dirname){
+	int low_x, up_x;
+	int number_peaks;
+	int FWHM_est;
+	
 	std::string answer;
 	ask_for_input: std::cout << "This function fits one peak across a given interval in all spectra in the given directory, in alphabetical order. Do you want to continue? [y/n]" << std::endl;
 	std::cin >> answer;
@@ -146,14 +169,28 @@ void FitDirectory(const char *dirname){
 	TUnixSystem *os = new TUnixSystem();
 	//Using said interface to open a directory given by the dirname pathname:
 	void *dir = os -> OpenDirectory(dirname);
+	
+	//asking the user for the lower and upper fit boundires:
+	std::cout << "Lower channel number for the fit boundry:" << std::endl;
+	std::cin >> low_x ; //taking user input
+	std::cout << "Upper channel number for the fit boundry:" << std::endl;
+	std::cin >> up_x ; //taking user input
+	
+	std::cout << "FWHM estimate:" << std::endl;
+	std::cin >> FWHM_est;
+	
 	//preparing a filename pointer:
 	const char *filename;
 	//looping over the files in a given directory and printing them:
-	while (( filename = os  -> GetDirEntry(dir))){
-	SpecLoad(filename, false);
 	
+	TSystem *sy = new TSystem("sy", "sy");
+	sy -> RedirectOutput("dir_fit_result.txt", "a");
+	while (( filename = os  -> GetDirEntry(dir))){
+		SpecLoad(filename, false);
+		FitDataArg1g(low_x, up_x, FWHM_est, cen_1);
 	std::cout << filename << std::endl;
 	}
+	sy->RedirectOutput(0);
 }
 
 
@@ -177,46 +214,12 @@ void Zoom(){
 
 void ZoomOut(){
 //This funciton goes from the current zoom in state to showing the full spectrum.
-	std::vector<int> data;
-	h1->GetXaxis()->SetRangeUser(0, data.size());
+	std::vector<int> dat;
+	h1->GetXaxis()->SetRangeUser(0, dat.size());
 	h1->Draw("Same");
 }
 
-std::vector<int> DataReadIn(const char *filename){
-//This function reads in the data from a .spe file. It recognizes the begining of data by finding a line with a "0 " string and saying that every line until a line containing a "$" contains data.
-	std::string line;
-	std::ifstream inFile;
-	std::vector<int> data;
-	bool Data_line = false;
-	inFile.open(filename);
-	int n;
-	//Looping over all lines (line) in a file (inFile):
-	while (getline(inFile, line)){
-		//loading in a line as a string (iss(line)):
-		std::istringstream iss(line);
-		//std::cout << iss.str() << std::endl;
-		//if the line containes $ charachter stop reading in the data:
-		if (Data_line && iss.str().find("$")!= std::string::npos){
-			Data_line = false;
-		};
-		
-		if (Data_line == true){
-			iss >> n;
-			data.push_back (n);
-		};
-		
-		//if the line contains "0 " charachters make sure that the next line is treated as data:
-		if ((iss.str().find("0 ")!=std::string::npos)){
-			Data_line = true;
-		};
-	};
-	
-	//used for checking if output array has the required data:
-	//for (int i = 0; i < 1000; i++){
-	//std::cout << data[i] << std::endl;
-	//};
-	return data;
-}
+
 
 double fit1g(double *x, double *p) {
 //An exaple function used by Prof. Peter Jones in his Buffit macro, kept in case but not used in the code itself.
